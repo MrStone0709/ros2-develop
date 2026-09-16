@@ -36,6 +36,10 @@ private:
 
         double speed = motor_.getSpeed();
         double angle = motor_.getAngle();
+        
+        if(angle>360){
+            angle = angle - 360;
+        }
 
         std_msgs::msg::Float64 speed_msg;
         std_msgs::msg::Float64 angle_msg;

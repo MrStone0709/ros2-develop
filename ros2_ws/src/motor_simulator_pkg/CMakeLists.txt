@@ -37,6 +37,16 @@ ament_target_dependencies(motor_simulator
   std_msgs
 )
 
+# torque generator node
+add_executable(torque_generator
+  src/torque_generator.cpp
+)
+
+ament_target_dependencies(torque_generator
+  rclcpp
+  std_msgs
+)
+
 # Install header files
 install(
   DIRECTORY include/
@@ -48,6 +58,7 @@ install(
   TARGETS
     motor_model
     motor_simulator
+    torque_generator
   DESTINATION lib/${PROJECT_NAME}
 )
 
