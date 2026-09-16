@@ -13,6 +13,12 @@ SHELL ["/bin/bash", "-c"]
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
 
+# 使用清华 ROS 2 镜像源：packages.ros.org 在国内直连极慢（约 10 kB/s），
+# 会导致 ros-$ROS_DISTRO-foxglove-bridge 等包安装/升级超时。
+# 内容与官方源完全一致（deb 包 SHA256 相同），仅替换下载地址。
+RUN sed -i "s|http://packages.ros.org/ros2/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu|" \
+    /etc/apt/sources.list.d/ros2.sources
+
 # Install tools and libraries.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     vim wget curl unzip \

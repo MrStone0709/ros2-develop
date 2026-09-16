@@ -15,6 +15,10 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+include_directories(
+  include
+)
+
 # =========================
 # 信号发生器节点
 # =========================
@@ -30,14 +34,16 @@ ament_target_dependencies(signal_generator
 # =========================
 # 信号滤波器节点
 # =========================
-#add_executable(signal_filter
-#  src/signal_filter.cpp
-#)
+add_executable(signal_filter
+  src/signal_filter.cpp
+  src/median_filter.cpp
+  src/low_pass_filter.cpp
+)
 
-#ament_target_dependencies(signal_filter
-#  rclcpp
-#  std_msgs
-#)
+ament_target_dependencies(signal_filter
+  rclcpp
+  std_msgs
+)
 
 # =========================
 # 安装可执行文件
@@ -45,8 +51,13 @@ ament_target_dependencies(signal_generator
 install(
   TARGETS
     signal_generator
-    #signal_filter
+    signal_filter
   DESTINATION lib/${PROJECT_NAME}
+)
+
+target_include_directories(signal_filter PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 
 ament_package()

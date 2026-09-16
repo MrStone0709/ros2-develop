@@ -23,6 +23,9 @@
 		"--network",
 		"host"
 	],
+	// 容器启动时在后台拉起 foxglove_bridge（默认端口 8766）。
+	// 8765 被 Windows 上的 Clash Verge 占用，故改用 8766。
+	"postStartCommand": "bash -lc 'source /opt/ros/jazzy/setup.bash && nohup ros2 run foxglove_bridge foxglove_bridge --ros-args -p port:=8766 > /tmp/foxglove_bridge.log 2>&1 &'",
 	"customizations": {
 		"vscode": {
 			"extensions": [
