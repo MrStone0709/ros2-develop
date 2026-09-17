@@ -9,6 +9,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float64.hpp"
 
+#include "ament_index_cpp/get_package_share_directory.hpp"
+
 using namespace std::chrono_literals;
 
 struct TorquePoint {
@@ -23,7 +25,7 @@ public:
         , current_index_(0) {
         torque_publisher_ = this->create_publisher<std_msgs::msg::Float64>("/torque_cmd", 10);
         // 读取 CSV 文件
-        loadCsv("/workspaces/ros2-develop/ros2_ws/src/motor_simulator_pkg/data/torque_test.csv");
+        loadCsv(ament_index_cpp::get_package_share_directory("motor_simulator_pkg") + "/data/torque_test.csv");
         timer_ = this->create_wall_timer(1ms, std::bind(&TorqueGeneratorNode::timerCallback, this));
         RCLCPP_INFO(this->get_logger(), "Torque generator started.");
     }

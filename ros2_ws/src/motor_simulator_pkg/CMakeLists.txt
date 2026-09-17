@@ -12,6 +12,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 # Motor model library
 add_library(motor_model
@@ -45,12 +46,19 @@ add_executable(torque_generator
 ament_target_dependencies(torque_generator
   rclcpp
   std_msgs
+  ament_index_cpp
 )
 
 # Install header files
 install(
   DIRECTORY include/
   DESTINATION include
+)
+
+# Install data files
+install(
+  DIRECTORY data/
+  DESTINATION share/${PROJECT_NAME}/data
 )
 
 # Install executable
