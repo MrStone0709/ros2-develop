@@ -49,6 +49,30 @@ ament_target_dependencies(torque_generator
   ament_index_cpp
 )
 
+#PID library
+add_library(PID
+  src/PID.cpp
+)
+
+target_include_directories(PID PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+# motor controller node
+add_executable(motor_controller
+  src/motor_controller.cpp
+)
+
+target_link_libraries(motor_controller
+  PID
+)
+
+ament_target_dependencies(motor_controller
+  rclcpp
+  std_msgs
+)
+
 # Install header files
 install(
   DIRECTORY include/
@@ -67,6 +91,7 @@ install(
     motor_model
     motor_simulator
     torque_generator
+    motor_controller
   DESTINATION lib/${PROJECT_NAME}
 )
 

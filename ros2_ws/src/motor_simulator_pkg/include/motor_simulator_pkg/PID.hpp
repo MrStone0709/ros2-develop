@@ -8,7 +8,7 @@ public:
     PID(float Kp, float Ki, float Kd, float MinOutput, float MaxOutput, float MaxIntegral,
         char Mode);
 
-    float PID_Calaulate(float Target, float Actual, float dt);
+    float PID_Calculate(float Target, float Actual, float dt);
 
 private:
     float Kp;

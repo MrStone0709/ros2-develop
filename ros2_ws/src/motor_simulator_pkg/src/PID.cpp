@@ -8,7 +8,7 @@ PID::PID(float Kp, float Ki, float Kd, float MinOutput, float MaxOutput, float M
     Output = 0.0f;
 }
 
-float PID::PID_Calaulate(float Target, float Actual, float dt) {
+float PID::PID_Calculate(float Target, float Actual, float dt) {
 
     if(this->Mode == PID_MODE_ANGLE)
     {
