@@ -15,8 +15,8 @@ public:
         , target_speed_(0.0)
         , actual_speed_(0.0)
         , torque_(0.0)
-        , angle_controller_(1.0, 0.1, 0.01, 0, 360.0, 5.0, PID_MODE_ANGLE)
-        , speed_controller_(1.0, 0.1, 0.01, -100.0, 100.0, 5.0, PID_MODE_NORMAL) {
+        , angle_controller_(1.0, 0.1, 0.01, -50, 50.0, 5.0, PID_MODE_ANGLE)
+        , speed_controller_(1.0, 0.1, 0.01, -200.0, 200.0, 5.0, PID_MODE_NORMAL) {
         // 创建订阅器和发布器
         angle_cmd_subscriber_ = this->create_subscription<std_msgs::msg::Float64>(
             "/angle_cmd", 10,
