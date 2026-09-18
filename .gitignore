@@ -70,3 +70,7 @@ record/
 
 # For temperary development
 develop_ws
+
+# Linux core dumps
+core
+core.*
