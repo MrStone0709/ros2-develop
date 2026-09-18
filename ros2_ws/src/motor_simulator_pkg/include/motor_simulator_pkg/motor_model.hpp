@@ -11,7 +11,7 @@ public:
     double getAngle() const;
 
 private:
-    double J_;           // 转动惯量include
+    double J_;           // 转动惯量
     double B_;           // 粘性阻尼系数
     double Load_Torque_; // 负载力矩
 

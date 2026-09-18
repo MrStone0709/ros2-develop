@@ -19,4 +19,24 @@ private:
     std::vector<CsvDataPoint> data_;
 };
 
+struct PidTuningPoint {
+    std::string controller;
+    float Kp;
+    float Ki;
+    float Kd;
+};
+
+class CsvPidReader {
+public:
+    explicit CsvPidReader(const std::string& filename);
+
+    const std::vector<PidTuningPoint>& getData() const;
+
+    // 按 controller 名字查找，未找到返回 false
+    bool find(const std::string& controller, PidTuningPoint& point) const;
+
+private:
+    std::vector<PidTuningPoint> data_;
+};
+
 #endif

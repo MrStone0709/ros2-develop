@@ -11,7 +11,7 @@ class MotorSimulator : public rclcpp::Node {
 public:
     MotorSimulator()
         : Node("motor_simulator_node")
-        , motor_(0.01, 0.1, 0.0) {
+        , motor_(0.01, 0.1, 1.0) {
         torque_subscriber_ = this->create_subscription<std_msgs::msg::Float64>(
             "/torque_cmd", 10,
             std::bind(&MotorSimulator::torqueCallback, this, std::placeholders::_1));

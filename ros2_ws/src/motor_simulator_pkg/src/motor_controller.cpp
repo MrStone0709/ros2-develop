@@ -1,8 +1,11 @@
-#include "../include/motor_simulator_pkg/PID.hpp"
 #include <chrono>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float64.hpp"
+
+#include "../include/motor_simulator_pkg/PID.hpp"
+#include "../include/motor_simulator_pkg/csv_reader.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 using namespace std::chrono_literals;
 
@@ -15,7 +18,7 @@ public:
         , target_speed_(0.0)
         , actual_speed_(0.0)
         , torque_(0.0)
-        , angle_controller_(1.0, 0.1, 0.01, -50, 50.0, 5.0, PID_MODE_ANGLE)
+        , angle_controller_(1.0, 0.1, 0.01, -100.0, 100.0, 5.0, PID_MODE_ANGLE)
         , speed_controller_(1.0, 0.1, 0.01, -200.0, 200.0, 5.0, PID_MODE_NORMAL) {
         // 创建订阅器和发布器
         angle_cmd_subscriber_ = this->create_subscription<std_msgs::msg::Float64>(
@@ -36,6 +39,23 @@ public:
 
         // 创建定时器
         timer_ = this->create_wall_timer(1ms, std::bind(&motor_controller::controlCallback, this));
+        
+        // Get the path to the CSV file
+        std::string package_share_directory =
+            ament_index_cpp::get_package_share_directory("motor_simulator_pkg");
+        std::string csv_file_path = package_share_directory + "/data/pid_tuning.csv";        
+
+        // 从CSV文件读取PID参数
+        CsvPidReader pid_reader(csv_file_path);
+        PidTuningPoint angle_pid_point, speed_pid_point;
+
+        if (pid_reader.find("angle_controller", angle_pid_point)) {
+            angle_controller_ = PID(angle_pid_point.Kp, angle_pid_point.Ki, angle_pid_point.Kd, -100.0, 100.0, 5.0, PID_MODE_ANGLE);
+        }
+
+        if (pid_reader.find("speed_controller", speed_pid_point)) {
+            speed_controller_ = PID(speed_pid_point.Kp, speed_pid_point.Ki, speed_pid_point.Kd, -200.0, 200.0, 5.0, PID_MODE_NORMAL);
+        }
 
         RCLCPP_INFO(this->get_logger(), "Motor controller started.");
     }

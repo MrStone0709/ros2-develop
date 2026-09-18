@@ -91,11 +91,13 @@ add_executable(motor_controller
 
 target_link_libraries(motor_controller
   PID
+  csv_reader
 )
 
 ament_target_dependencies(motor_controller
   rclcpp
   std_msgs
+  ament_index_cpp
 )
 
 # Install header files
