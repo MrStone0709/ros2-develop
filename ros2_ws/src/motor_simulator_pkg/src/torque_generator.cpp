@@ -18,15 +18,15 @@ struct TorquePoint {
     double torque;
 };
 
-class TorqueGeneratorNode : public rclcpp::Node {
+class TorqueGenerator : public rclcpp::Node {
 public:
-    TorqueGeneratorNode()
+    TorqueGenerator()
         : Node("torque_generator_node")
         , current_index_(0) {
         torque_publisher_ = this->create_publisher<std_msgs::msg::Float64>("/torque_cmd", 10);
         // 读取 CSV 文件
         loadCsv(ament_index_cpp::get_package_share_directory("motor_simulator_pkg") + "/data/torque_test.csv");
-        timer_ = this->create_wall_timer(1ms, std::bind(&TorqueGeneratorNode::timerCallback, this));
+        timer_ = this->create_wall_timer(1ms, std::bind(&TorqueGenerator::timerCallback, this));
         RCLCPP_INFO(this->get_logger(), "Torque generator started.");
     }
 
@@ -107,7 +107,7 @@ private:
 
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<TorqueGeneratorNode>();
+    auto node = std::make_shared<TorqueGenerator>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;

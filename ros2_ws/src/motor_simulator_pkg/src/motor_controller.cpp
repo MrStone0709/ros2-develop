@@ -15,8 +15,8 @@ public:
         , target_speed_(0.0)
         , actual_speed_(0.0)
         , torque_(0.0)
-        , angle_controller_(1.0, 0.1, 0.01, -10.0, 10.0, 5.0, PID_MODE_ANGLE)
-        , speed_controller_(1.0, 0.1, 0.01, -10.0, 10.0, 5.0, PID_MODE_NORMAL) {
+        , angle_controller_(1.0, 0.1, 0.01, 0, 360.0, 5.0, PID_MODE_ANGLE)
+        , speed_controller_(1.0, 0.1, 0.01, -100.0, 100.0, 5.0, PID_MODE_NORMAL) {
         // 创建订阅器和发布器
         angle_cmd_subscriber_ = this->create_subscription<std_msgs::msg::Float64>(
             "/angle_cmd", 10,
@@ -69,9 +69,6 @@ private:
         speed_cmd_publisher_->publish(speed_msg);
     }
 
-    PID angle_controller_;
-    PID speed_controller_;
-
     double target_angle_;
     double actual_angle_;
 
@@ -80,6 +77,9 @@ private:
 
     double torque_;
 
+    PID angle_controller_;
+    PID speed_controller_;
+
     rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr angle_cmd_subscriber_;
     rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr motor_angle_subscriber_;
     rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr motor_speed_subscriber_;
@@ -87,3 +87,11 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr speed_cmd_publisher_;
     rclcpp::TimerBase::SharedPtr timer_;
 };
+
+int main(int argc, char* argv[]) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared<motor_controller>();
+    rclcpp::spin(node);
+    rclcpp::shutdown();
+    return 0;
+}

@@ -7,20 +7,20 @@
 
 using namespace std::chrono_literals;
 
-class MotorSimulatorNode : public rclcpp::Node {
+class MotorSimulator : public rclcpp::Node {
 public:
-    MotorSimulatorNode()
+    MotorSimulator()
         : Node("motor_simulator_node")
         , motor_(0.01, 0.1, 0.0) {
         torque_subscriber_ = this->create_subscription<std_msgs::msg::Float64>(
             "/torque_cmd", 10,
-            std::bind(&MotorSimulatorNode::torqueCallback, this, std::placeholders::_1));
+            std::bind(&MotorSimulator::torqueCallback, this, std::placeholders::_1));
 
         speed_publisher_ = this->create_publisher<std_msgs::msg::Float64>("/motor_speed", 10);
 
         angle_publisher_ = this->create_publisher<std_msgs::msg::Float64>("/motor_angle", 10);
 
-        timer_ = this->create_wall_timer(1ms, std::bind(&MotorSimulatorNode::simulationCallback, this));
+        timer_ = this->create_wall_timer(1ms, std::bind(&MotorSimulator::simulationCallback, this));
 
         RCLCPP_INFO(this->get_logger(), "Motor simulator started.");
     }
@@ -68,7 +68,7 @@ private:
 
 int main(int argc, char *argv[]) {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<MotorSimulatorNode>();
+    auto node = std::make_shared<MotorSimulator>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;

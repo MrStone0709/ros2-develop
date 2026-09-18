@@ -24,6 +24,26 @@ target_include_directories(motor_model PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
+#PID library
+add_library(PID
+  src/PID.cpp
+)
+
+target_include_directories(PID PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+#csv reader library
+add_library(csv_reader
+  src/csv_reader.cpp
+)
+
+target_include_directories(csv_reader PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
 # Motor simulator node
 add_executable(motor_simulator
   src/motor_simulator.cpp
@@ -49,14 +69,19 @@ ament_target_dependencies(torque_generator
   ament_index_cpp
 )
 
-#PID library
-add_library(PID
-  src/PID.cpp
+#angle generator node
+add_executable(angle_generator
+  src/angle_generator.cpp
 )
 
-target_include_directories(PID PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
+target_link_libraries(angle_generator
+  csv_reader
+)
+
+ament_target_dependencies(angle_generator
+  rclcpp
+  std_msgs
+  ament_index_cpp
 )
 
 # motor controller node
@@ -89,8 +114,11 @@ install(
 install(
   TARGETS
     motor_model
+    PID
+    csv_reader
     motor_simulator
     torque_generator
+    angle_generator
     motor_controller
   DESTINATION lib/${PROJECT_NAME}
 )

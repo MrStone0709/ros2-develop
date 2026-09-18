@@ -11,6 +11,14 @@ void MotorModel::update(double torque, double dt) {
     double acceleration = (torque - B_ * speed_ - Load_Torque_) / J_;
     speed_ += acceleration * dt;
     angle_ += speed_ * dt;
+
+    if (angle_ > 360.0) {
+        angle_ -= 360.0;
+    }
+
+    if (angle_ < 0.0) {
+        angle_ += 360.0;
+    }
 }
 
 double MotorModel::getSpeed() const {
