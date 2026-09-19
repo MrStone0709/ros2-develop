@@ -63,6 +63,10 @@ add_executable(torque_generator
   src/torque_generator.cpp
 )
 
+target_link_libraries(torque_generator
+  csv_reader
+)
+
 ament_target_dependencies(torque_generator
   rclcpp
   std_msgs
