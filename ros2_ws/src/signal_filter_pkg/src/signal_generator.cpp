@@ -14,8 +14,8 @@ public:
         , random_generator_(std::random_device{}()) {
         // 声明参数
         this->declare_parameter<double>("amplitude", 1.0);
-        this->declare_parameter<double>("signal_frequency", 1.0);
-        this->declare_parameter<double>("publish_frequency", 1000.0);
+        this->declare_parameter<double>("signal_frequency", 20.0);
+        this->declare_parameter<double>("publish_frequency", 2000.0);
 
         // 获取参数
         amplitude_ = this->get_parameter("amplitude").as_double();
